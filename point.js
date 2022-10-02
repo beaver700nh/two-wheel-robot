@@ -1,4 +1,5 @@
-import * as Util from "./util.js";
+import * as Util   from "./util.js";
+import * as Vector from "./vector.js";
 
 /*
  * A point on a `w`x`h` HTML5 canvas, using Cartesian coordinates (x, y).
@@ -7,6 +8,7 @@ class PointCanvas {
   constructor(w, h) {
     this.w = w;
     this.h = h;
+    this.from_numbers(0, 0);
   }
 
   // construct a new point from another PointCanvas `p`
@@ -49,12 +51,25 @@ class PointCanvas {
 
     return this;
   }
+
+  // move the point by a Vector `v`
+  move_by(v) {
+    v = v.to_cartesian();
+    this.x += v.x;
+    this.y += v.y;
+
+    return this;
+  }
 }
 
 /*
  * A point in Cartesian coordinates (x, y).
  */
 class PointCartesian {
+  constructor() {
+    this.from_numbers(0, 0);
+  }
+
   // construct a new point from another PointCartesian `p`
   from_cartesian(p) {
     this.x = p.x;
@@ -96,12 +111,25 @@ class PointCartesian {
 
     return this;
   }
+
+  // move the point by a Vector `v`
+  move_by(v) {
+    v = v.to_cartesian();
+    this.x += v.x;
+    this.y += v.y;
+
+    return this;
+  }
 }
 
 /*
  * A point in polar coordinates (r, θ).
  */
 class PointPolar {
+  constructor() {
+    this.from_numbers(0, 0);
+  }
+
   // construct a new point from another PointPolar `p`
   from_polar(p) {
     this.r = p.r;
@@ -131,6 +159,13 @@ class PointPolar {
     this.θ = θ;
 
     return this;
+  }
+
+  // move the point by a Vector `v`
+  move_by(v) {
+    return this.from_cartesian(
+      new PointCartesian().from_polar(this).move_by(v)
+    );
   }
 }
 
