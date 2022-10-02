@@ -62,13 +62,15 @@ var wheel_vectors = [
   new Vector.Vector().from_polar(0.0, Math.PI * (3 / 4)),
 ];
 
+var position = 0;
+
 // Draw the current frame, `n` milliseconds since the last frame.
-function draw_frame(ctx, CW, CH, t_total, t_frame) {
+function draw_frame(ctx, CW, CH, t_frame) {
   ctx.clearRect(0, 0, CW, CH);
   ctx.graph_polar(Mathz.Functions.Polar.circle(4), 0, 2 * Math.PI, 0.1, 2, "black", true);
 
-  wheel_vectors[0].r = Math.sin(t_total / 800 - Math.PI * 5 / 4);
-  wheel_vectors[1].r = Math.cos(t_total / 800 - Math.PI * 5 / 4);
+  wheel_vectors[0].r = Math.sin(position / 3 - Math.PI * 5 / 4);
+  wheel_vectors[1].r = Math.cos(position / 3 - Math.PI * 5 / 4);
 
   const v_net = new Vector.Vector();
 
@@ -85,7 +87,9 @@ function draw_frame(ctx, CW, CH, t_total, t_frame) {
 
   ctx.draw_point(new Point.PointCanvas(CW, CH).from_cartesian(robot.points[robot.points.length - 1]), 5, "black");
 
-  robot.move_by(v_net.scale(t_frame / 200));
+  robot.move_by(v_net.scale(t_frame / 800));
+
+  position = (position + Math.PI / 50);
 }
 
 $(document).ready(
@@ -98,22 +102,17 @@ $(document).ready(
 
     const ctx = $("#canvas")[0].getContext("2d");
 
-    let start, previous;
+    let previous;
 
     function draw(timestamp) {
-      if (start === undefined) {
-        start = timestamp;
-      }
-
       if (previous === undefined) {
         previous = timestamp;
       }
 
-      const t_total = timestamp - start;
       const t_frame = timestamp - previous;
 
       if (t_frame >= 1000 / FPS) {
-        draw_frame(ctx, CW, CH, t_total, t_frame);
+        draw_frame(ctx, CW, CH, t_frame);
         previous = timestamp;
       }
 
