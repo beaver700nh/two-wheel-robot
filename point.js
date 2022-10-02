@@ -52,13 +52,19 @@ class PointCanvas {
     return this;
   }
 
+  // return this point moved by a Vector `v`
+  moved_by(v) {
+    v = v.to_cartesian();
+
+    return new PointCanvas(this.w, this.h).from_numbers(
+      this.x + v.x,
+      this.y + v.y
+    );
+  }
+
   // move the point by a Vector `v`
   move_by(v) {
-    v = v.to_cartesian();
-    this.x += v.x;
-    this.y += v.y;
-
-    return this;
+    return this.from_canvas(this.moved_by(v));
   }
 }
 
@@ -112,13 +118,19 @@ class PointCartesian {
     return this;
   }
 
+  // return this point moved by a Vector `v`
+  moved_by(v) {
+    v = v.to_cartesian();
+
+    return new PointCartesian().from_numbers(
+      this.x + v.x,
+      this.y + v.y
+    );
+  }
+
   // move the point by a Vector `v`
   move_by(v) {
-    v = v.to_cartesian();
-    this.x += v.x;
-    this.y += v.y;
-
-    return this;
+    return this.from_cartesian(this.moved_by(v));
   }
 }
 
@@ -161,11 +173,16 @@ class PointPolar {
     return this;
   }
 
+  // return this point moved by a Vector `v`
+  moved_by(v) {
+    return new PointPolar().from_cartesian(
+      new PointCartesian().from_polar(this).moved_by(v)
+    );
+  }
+
   // move the point by a Vector `v`
   move_by(v) {
-    return this.from_cartesian(
-      new PointCartesian().from_polar(this).move_by(v)
-    );
+    return this.from_polar(this.moved_by(v));
   }
 }
 

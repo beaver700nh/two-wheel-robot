@@ -44,24 +44,27 @@ class Vector {
     return this;
   }
 
-  // add another vector `v` to this vector.
-  add(v) {
+  // return this vector added to another vector `v`.
+  plus(v) {
     const a = this.to_cartesian();
     const b = v.to_cartesian();
 
-    this.from_cartesian(a.x + b.x, a.y + b.y);
-
-    return this;
+    return new Vector().from_cartesian(a.x + b.x, a.y + b.y);
   }
 
-  // subtract another vector `v` from this vector.
-  subtract(v) {
-    const a = this.to_cartesian();
-    const b = v.to_cartesian();
+  // add another vector `v` to this vector.
+  add(v) {
+    return this.from_other(this.plus(v));
+  }
 
-    this.from_cartesian(a.x - b.x, a.y - b.y);
+  // return this vector multiplied by a scalar `s`.
+  times(s) {
+    return new Vector().from_polar(this.r * s, this.θ);
+  }
 
-    return this;
+  // multiply this vector by a scalar `s`.
+  scale(s) {
+    return this.from_other(this.times(s));
   }
 }
 
