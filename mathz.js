@@ -1,3 +1,6 @@
+/*
+ * An object containing various utility functions for math.
+ */
 const Functions = {
   Polar: {
     circle: function(R) {

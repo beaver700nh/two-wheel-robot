@@ -1,11 +1,15 @@
 import * as Util from "./util.js";
 
+/*
+ * A point on a `w`x`h` HTML5 canvas, using Cartesian coordinates (x, y).
+ */
 class PointCanvas {
   constructor(w, h) {
     this.w = w;
     this.h = h;
   }
 
+  // construct a new point from another PointCanvas `p`
   from_canvas(p) {
     this.x = point.x;
     this.y = point.y;
@@ -13,6 +17,7 @@ class PointCanvas {
     return this;
   }
 
+  // construct a new point from a PointCartesian `p`
   from_cartesian(p) {
     const min = Util.SCREEN_SIZE / -2;
     const max = Util.SCREEN_SIZE / 2;
@@ -30,12 +35,14 @@ class PointCanvas {
     return this;
   }
 
+  // construct a new point from a PointPolar `p`
   from_polar(p) {
     return this.from_cartesian(
       new PointCartesian().from_polar(p)
     );
   }
 
+  // construct a new point from two numbers `x` and `y`
   from_numbers(x, y) {
     this.x = x;
     this.y = y;
@@ -44,7 +51,11 @@ class PointCanvas {
   }
 }
 
+/*
+ * A point in Cartesian coordinates (x, y).
+ */
 class PointCartesian {
+  // construct a new point from another PointCartesian `p`
   from_cartesian(p) {
     this.x = p.x;
     this.y = p.y;
@@ -52,6 +63,7 @@ class PointCartesian {
     return this;
   }
 
+  // construct a new point from a PointCanvas `p`
   from_canvas(p) {
     const min = Util.SCREEN_SIZE / -2;
     const max = Util.SCREEN_SIZE / 2;
@@ -69,6 +81,7 @@ class PointCartesian {
     return this;
   }
 
+  // construct a new point from a PointPolar `p`
   from_polar(p) {
     this.x = p.r * Math.cos(p.θ);
     this.y = p.r * Math.sin(p.θ);
@@ -76,6 +89,7 @@ class PointCartesian {
     return this;
   }
 
+  // construct a new point from two numbers `x` and `y`
   from_numbers(x, y) {
     this.x = x;
     this.y = y;
@@ -84,7 +98,11 @@ class PointCartesian {
   }
 }
 
+/*
+ * A point in polar coordinates (r, θ).
+ */
 class PointPolar {
+  // construct a new point from another PointPolar `p`
   from_polar(p) {
     this.r = p.r;
     this.θ = p.θ;
@@ -92,12 +110,14 @@ class PointPolar {
     return this;
   }
 
+  // construct a new point from a PointCanvas `p`
   from_canvas(p) {
     return this.from_cartesian(
       new PointCartesian().from_canvas(p)
     );
   }
 
+  // construct a new point from a PointCartesian `p`
   from_cartesian(p) {
     this.r = Math.sqrt(p.x * p.x + p.y * p.y);
     this.θ = Math.atan2(p.y, p.x);
@@ -105,6 +125,7 @@ class PointPolar {
     return this;
   }
 
+  // construct a new point from two numbers `r` and `θ`
   from_numbers(r, θ) {
     this.r = r;
     this.θ = θ;

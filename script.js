@@ -1,18 +1,21 @@
 import * as Point from "./point.js";
 import * as Mathz from "./mathz.js";
 
+// Graph a polar function `fn` on the canvas context.
 CanvasRenderingContext2D.prototype.graph_polar = function(fn, domain_min, domain_max, step, thickness, color) {
+  this.beginPath();
+  this.lineWidth = thickness;
+  this.strokeStyle = color;
+
   for (let θ = domain_min; θ <= domain_max; θ += step) {
     const r = fn(θ);
     const p = new Point.PointPolar().from_numbers(r, θ);
     const q = new Point.PointCanvas(this.canvas.width, this.canvas.height).from_polar(p);
 
-    this.beginPath();
-    this.arc(q.x, q.y, thickness, 0, 2 * Math.PI);
-    this.fillStyle = color;
-    this.fill();
-    this.closePath();
+    this.lineTo(q.x, q.y);
   }
+
+  this.stroke();
 };
 
 $(document).ready(
@@ -27,7 +30,7 @@ $(document).ready(
 
     ctx.graph_polar(
       Mathz.Functions.Polar.circle(4),
-      0, 2 * Math.PI, 0.005, 1, "black"
+      0, 2 * Math.PI, 0.001, 2, "black"
     );
   }
 );
